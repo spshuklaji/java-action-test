@@ -1,0 +1,29 @@
+name: Java11
+
+on:
+  push:
+    paths:
+      - '*/*/java11.yml'
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '0 15,18 * * *'
+jobs:
+  java11:
+    # internal comment counter: 100
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-18.04]
+        update: [x]
+      fail-fast: false
+      max-parallel: 5
+    name: JDK 11.0.${{ matrix.update }}, ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up JDK
+      run:  |
+        wget -q https://cdn.azul.com/zing/releases/tgz/zing21.05.0.0-7-ca-jdk11.0.11-linux_x64.tar.gz
+        tar -tvvf zing21.05.0.0-7-ca-jdk11.0.11-linux_x64.tar.gz
+        tar -zxf zing21.05.0.0-7-ca-jdk11.0.11-linux_x64.tar.gz
+        zing21.05.0.0-7-ca-jdk11.0.11-linux_x64/bin/java -version
